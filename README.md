@@ -335,13 +335,9 @@ docker-compose up --build
 
 ## 🤝 Đóng góp
 
-Pull requests và issues đều được chào đón! Vui lòng đọc `CONTRIBUTING.md` trước khi đóng góp.
-
 ---
 
 ## 📄 Giấy phép
-
-MIT License — xem file `LICENSE` để biết thêm chi tiết.
 
 ---
 
