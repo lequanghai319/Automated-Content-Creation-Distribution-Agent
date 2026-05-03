@@ -342,5 +342,5 @@ docker-compose up --build
 ---
 
 <p align="center">
-  Made with ❤️ using Multi-Agent AI | 2025
+  2026
 </p>
