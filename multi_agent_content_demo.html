@@ -1,0 +1,302 @@
+
+<h2 class="sr-only">Demo sản phẩm: Hệ thống Multi-Agent tạo nội dung tự động đa nền tảng</h2>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+:root{
+  --c1:#0f172a;--c2:#1e293b;--c3:#334155;
+  --accent:#6366f1;--accent2:#06b6d4;--accent3:#10b981;--accent4:#f59e0b;
+  --text:#f8fafc;--muted:#94a3b8;--border:#334155;
+  --card:rgba(30,41,59,0.8);
+}
+.wrap{background:linear-gradient(135deg,#0f172a 0%,#1a1040 50%,#0f172a 100%);min-height:600px;padding:0;border-radius:var(--border-radius-lg);overflow:hidden;color:var(--text)}
+.header{background:rgba(15,23,42,0.95);border-bottom:1px solid rgba(99,102,241,0.3);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(10px)}
+.logo{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:var(--text)}
+.logo-dot{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#6366f1,#06b6d4);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff}
+.status-bar{display:flex;align-items:center;gap:16px}
+.status-pill{display:flex;align-items:center;gap:5px;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);border-radius:20px;padding:3px 10px;font-size:11px;color:#10b981}
+.pulse{width:6px;height:6px;border-radius:50%;background:#10b981;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.main{display:grid;grid-template-columns:220px 1fr;min-height:540px}
+.sidebar{background:rgba(15,23,42,0.6);border-right:1px solid var(--border);padding:16px 12px}
+.sidebar-title{font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;padding-left:8px}
+.agent-btn{width:100%;display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;background:none;border:none;color:var(--muted);cursor:pointer;font-size:12.5px;font-family:var(--font-sans);margin-bottom:2px;transition:all .2s;text-align:left}
+.agent-btn:hover{background:rgba(99,102,241,0.1);color:var(--text)}
+.agent-btn.active{background:rgba(99,102,241,0.2);color:var(--text);border-left:3px solid var(--accent)}
+.agent-btn.done{color:#10b981}
+.agent-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.ic1{background:rgba(99,102,241,0.2)}
+.ic2{background:rgba(6,182,212,0.2)}
+.ic3{background:rgba(245,158,11,0.2)}
+.ic4{background:rgba(16,185,129,0.2)}
+.divider{border:none;border-top:1px solid var(--border);margin:12px 0}
+.run-btn{width:100%;padding:10px;border-radius:8px;background:linear-gradient(135deg,#6366f1,#06b6d4);border:none;color:#fff;font-size:13px;font-weight:500;font-family:var(--font-sans);cursor:pointer;margin-top:8px;transition:opacity .2s}
+.run-btn:hover{opacity:.9}
+.run-btn:disabled{opacity:.5;cursor:not-allowed}
+.content{padding:20px;overflow:auto}
+.section-label{font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
+.topic-row{display:flex;gap:8px;margin-bottom:20px}
+.topic-input{flex:1;background:rgba(30,41,59,0.8);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-size:13px;font-family:var(--font-sans);outline:none}
+.topic-input:focus{border-color:rgba(99,102,241,0.6)}
+.topic-input::placeholder{color:var(--muted)}
+.plat-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}
+.chip{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:500;border:1px solid;cursor:pointer;transition:all .2s}
+.chip.tiktok{border-color:rgba(255,0,80,0.4);color:#ff0050;background:rgba(255,0,80,0.1)}
+.chip.tiktok.on{background:rgba(255,0,80,0.25)}
+.chip.youtube{border-color:rgba(255,70,70,0.4);color:#ff4646;background:rgba(255,70,70,0.1)}
+.chip.youtube.on{background:rgba(255,70,70,0.25)}
+.chip.facebook{border-color:rgba(59,130,246,0.4);color:#3b82f6;background:rgba(59,130,246,0.1)}
+.chip.facebook.on{background:rgba(59,130,246,0.25)}
+.pipeline{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px}
+.pcard{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;transition:all .3s}
+.pcard.active{border-color:rgba(99,102,241,0.6);box-shadow:0 0 16px rgba(99,102,241,0.2)}
+.pcard.done{border-color:rgba(16,185,129,0.4)}
+.pcard-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.pcard-name{font-size:11px;font-weight:500;color:var(--text)}
+.pcard-badge{font-size:9px;padding:2px 7px;border-radius:10px;font-weight:500}
+.badge-idle{background:rgba(148,163,184,0.15);color:var(--muted)}
+.badge-run{background:rgba(99,102,241,0.2);color:#a5b4fc;animation:blink 1s infinite}
+.badge-done{background:rgba(16,185,129,0.2);color:#10b981}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.5}}
+.pcard-progress{height:3px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden;margin-bottom:8px}
+.pcard-bar{height:100%;border-radius:2px;width:0;transition:width .5s ease}
+.bar1{background:linear-gradient(90deg,#6366f1,#a78bfa)}
+.bar2{background:linear-gradient(90deg,#06b6d4,#67e8f9)}
+.bar3{background:linear-gradient(90deg,#f59e0b,#fcd34d)}
+.bar4{background:linear-gradient(90deg,#10b981,#6ee7b7)}
+.pcard-info{font-size:10px;color:var(--muted);line-height:1.5}
+.output-box{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;min-height:160px}
+.output-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.output-title{font-size:12px;font-weight:500;color:var(--text)}
+.output-tabs{display:flex;gap:4px}
+.otab{padding:3px 10px;border-radius:6px;font-size:11px;cursor:pointer;border:1px solid transparent;transition:all .2s;background:none;color:var(--muted);font-family:var(--font-sans)}
+.otab.active{background:rgba(99,102,241,0.2);border-color:rgba(99,102,241,0.4);color:var(--text)}
+.log-area{font-family:var(--font-mono);font-size:11px;line-height:1.8;color:var(--muted)}
+.log-line{display:flex;gap:8px;margin-bottom:2px}
+.log-time{color:#475569;flex-shrink:0}
+.log-tag{flex-shrink:0;font-weight:500}
+.log-tag.info{color:#6366f1}
+.log-tag.debug{color:var(--muted)}
+.log-tag.success{color:#10b981}
+.log-tag.warn{color:#f59e0b}
+.log-msg{color:#cbd5e1}
+.result-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.result-card{background:rgba(15,23,42,0.8);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center}
+.result-platform{font-size:10px;color:var(--muted);margin-bottom:4px}
+.result-status{font-size:22px;margin-bottom:4px}
+.result-label{font-size:11px;font-weight:500}
+.result-label.ready{color:#10b981}
+.result-label.pending{color:var(--muted)}
+.metrics-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px}
+.metric{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center}
+.metric-val{font-size:20px;font-weight:500;color:var(--text);margin-bottom:2px}
+.metric-lbl{font-size:10px;color:var(--muted)}
+.kw-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.kw{padding:3px 9px;background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.3);border-radius:12px;font-size:11px;color:#a5b4fc}
+</style>
+
+<div class="wrap">
+  <div class="header">
+    <div class="logo">
+      <div class="logo-dot">MA</div>
+      Multi-Agent Content Studio
+    </div>
+    <div class="status-bar">
+      <div class="status-pill"><div class="pulse"></div>System online</div>
+      <div style="font-size:11px;color:var(--muted)">v2.1.0</div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="sidebar">
+      <div class="sidebar-title">Agents</div>
+      <button class="agent-btn active" onclick="selectAgent(0)" id="abtn0">
+        <div class="agent-icon ic1">🔍</div>
+        <div><div style="font-size:12px">Researcher</div><div style="font-size:10px;color:var(--muted)">Trend analysis</div></div>
+      </button>
+      <button class="agent-btn" onclick="selectAgent(1)" id="abtn1">
+        <div class="agent-icon ic2">📋</div>
+        <div><div style="font-size:12px">Planner</div><div style="font-size:10px;color:var(--muted)">Content strategy</div></div>
+      </button>
+      <button class="agent-btn" onclick="selectAgent(2)" id="abtn2">
+        <div class="agent-icon ic3">🎨</div>
+        <div><div style="font-size:12px">Creator</div><div style="font-size:10px;color:var(--muted)">Media generation</div></div>
+      </button>
+      <button class="agent-btn" onclick="selectAgent(3)" id="abtn3">
+        <div class="agent-icon ic4">✅</div>
+        <div><div style="font-size:12px">Optimizer</div><div style="font-size:10px;color:var(--muted)">Review & publish</div></div>
+      </button>
+      <hr class="divider">
+      <div class="sidebar-title">Platforms</div>
+      <div style="display:flex;flex-direction:column;gap:5px;padding:0 4px">
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);cursor:pointer"><input type="checkbox" checked id="ck_tiktok" style="accent-color:#ff0050"> TikTok</label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);cursor:pointer"><input type="checkbox" checked id="ck_youtube" style="accent-color:#ff4646"> YouTube Shorts</label>
+        <label style="display:flex;align-items:center;gap=6px;font-size:12px;color:var(--muted);cursor:pointer"><input type="checkbox" checked id="ck_fb" style="accent-color:#3b82f6"> Facebook Reels</label>
+      </div>
+      <hr class="divider">
+      <button class="run-btn" id="runBtn" onclick="runPipeline()">▶ Run Pipeline</button>
+      <button class="run-btn" style="margin-top:6px;background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.3);color:#a5b4fc" onclick="resetAll()">↺ Reset</button>
+    </div>
+
+    <div class="content">
+      <div class="section-label">Input</div>
+      <div class="topic-row">
+        <input class="topic-input" id="topicInput" placeholder="Nhập chủ đề nội dung... (VD: Top 5 AI tools 2025)" value="Top 5 công cụ AI giúp tăng năng suất 2025">
+      </div>
+
+      <div class="section-label">Pipeline status</div>
+      <div class="pipeline">
+        <div class="pcard" id="pc0">
+          <div class="pcard-header"><div class="pcard-name">🔍 Researcher</div><div class="pcard-badge badge-idle" id="pb0">Idle</div></div>
+          <div class="pcard-progress"><div class="pcard-bar bar1" id="bar0"></div></div>
+          <div class="pcard-info" id="pi0">Chờ bắt đầu...</div>
+        </div>
+        <div class="pcard" id="pc1">
+          <div class="pcard-header"><div class="pcard-name">📋 Planner</div><div class="pcard-badge badge-idle" id="pb1">Idle</div></div>
+          <div class="pcard-progress"><div class="pcard-bar bar2" id="bar1"></div></div>
+          <div class="pcard-info" id="pi1">Chờ Researcher...</div>
+        </div>
+        <div class="pcard" id="pc2">
+          <div class="pcard-header"><div class="pcard-name">🎨 Creator</div><div class="pcard-badge badge-idle" id="pb2">Idle</div></div>
+          <div class="pcard-progress"><div class="pcard-bar bar3" id="bar2"></div></div>
+          <div class="pcard-info" id="pi2">Chờ Planner...</div>
+        </div>
+        <div class="pcard" id="pc3">
+          <div class="pcard-header"><div class="pcard-name">✅ Optimizer</div><div class="pcard-badge badge-idle" id="pb3">Idle</div></div>
+          <div class="pcard-progress"><div class="pcard-bar bar4" id="bar3"></div></div>
+          <div class="pcard-info" id="pi3">Chờ Creator...</div>
+        </div>
+      </div>
+
+      <div class="metrics-row" id="metricsRow" style="display:none">
+        <div class="metric"><div class="metric-val" id="m1">0</div><div class="metric-lbl">Keywords found</div></div>
+        <div class="metric"><div class="metric-val" id="m2">0</div><div class="metric-lbl">Scripts generated</div></div>
+        <div class="metric"><div class="metric-val" id="m3">0</div><div class="metric-lbl">Assets created</div></div>
+        <div class="metric"><div class="metric-val" id="m4">0%</div><div class="metric-lbl">SEO score</div></div>
+      </div>
+
+      <div class="output-box">
+        <div class="output-header">
+          <div class="output-title">Output</div>
+          <div class="output-tabs">
+            <button class="otab active" id="tab0" onclick="switchTab(0)">Activity log</button>
+            <button class="otab" id="tab1" onclick="switchTab(1)">Results</button>
+            <button class="otab" id="tab2" onclick="switchTab(2)">Keywords</button>
+          </div>
+        </div>
+        <div id="panel0" class="log-area" id="logArea">
+          <div class="log-line"><span class="log-time">--:--:--</span><span class="log-tag info">[SYS]</span><span class="log-msg">System ready. Enter a topic and click Run Pipeline.</span></div>
+        </div>
+        <div id="panel1" style="display:none">
+          <div class="result-grid" id="resultGrid">
+            <div class="result-card"><div class="result-platform">TikTok</div><div class="result-status">⏳</div><div class="result-label pending">Pending</div></div>
+            <div class="result-card"><div class="result-platform">YouTube Shorts</div><div class="result-status">⏳</div><div class="result-label pending">Pending</div></div>
+            <div class="result-card"><div class="result-platform">Facebook Reels</div><div class="result-status">⏳</div><div class="result-label pending">Pending</div></div>
+          </div>
+        </div>
+        <div id="panel2" style="display:none">
+          <div style="font-size:11px;color:var(--muted);margin-bottom:8px">Keywords được phân tích và đề xuất:</div>
+          <div class="kw-tags" id="kwTags"><span style="font-size:11px;color:var(--muted)">Chưa có dữ liệu. Chạy pipeline để phân tích.</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+var running=false,tab=0,logs=[];
+function now(){var d=new Date();return d.toTimeString().slice(0,8)}
+function addLog(tag,cls,msg){
+  var a=document.getElementById('panel0');
+  var l=document.createElement('div');l.className='log-line';
+  l.innerHTML='<span class="log-time">'+now()+'</span><span class="log-tag '+cls+'">['+tag+']</span><span class="log-msg">'+msg+'</span>';
+  a.appendChild(l);a.scrollTop=a.scrollHeight;
+}
+function setCard(i,state,info,pct){
+  var b=document.getElementById('pb'+i),p=document.getElementById('pi'+i),c=document.getElementById('pc'+i),bar=document.getElementById('bar'+i);
+  b.className='pcard-badge badge-'+state;
+  b.textContent=state==='idle'?'Idle':state==='run'?'Running...':'Done';
+  if(info)p.textContent=info;
+  if(pct!==undefined)bar.style.width=pct+'%';
+  if(state==='run')c.className='pcard active';
+  else if(state==='done')c.className='pcard done';
+  else c.className='pcard';
+}
+function switchTab(i){
+  tab=i;
+  for(var j=0;j<3;j++){document.getElementById('tab'+j).className='otab'+(j===i?' active':'');document.getElementById('panel'+j).style.display=j===i?'':'none';}
+}
+function selectAgent(i){for(var j=0;j<4;j++)document.getElementById('abtn'+j).className='agent-btn'+(j===i?' active':'');}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
+function animCount(id,target,suffix,dur){
+  var el=document.getElementById(id),start=0,step=Math.ceil(target/(dur/50));
+  var t=setInterval(function(){start=Math.min(start+step,target);el.textContent=start+(suffix||'');if(start>=target)clearInterval(t);},50);
+}
+async function runPipeline(){
+  if(running)return;
+  running=true;
+  var btn=document.getElementById('runBtn');
+  btn.disabled=true;btn.textContent='⏳ Running...';
+  var topic=document.getElementById('topicInput').value||'AI productivity tools';
+  document.getElementById('panel0').innerHTML='';
+  document.getElementById('metricsRow').style.display='none';
+  for(var i=0;i<4;i++)setCard(i,'idle','Chờ bắt đầu...',0);
+  document.getElementById('kwTags').innerHTML='<span style="font-size:11px;color:var(--muted)">Đang phân tích...</span>';
+  document.getElementById('resultGrid').innerHTML='<div class="result-card"><div class="result-platform">TikTok</div><div class="result-status">⏳</div><div class="result-label pending">Pending</div></div><div class="result-card"><div class="result-platform">YouTube Shorts</div><div class="result-status">⏳</div><div class="result-label pending">Pending</div></div><div class="result-card"><div class="result-platform">Facebook Reels</div><div class="result-status">⏳</div><div class="result-label pending">Pending</div></div>';
+
+  addLog('SYS','info','Pipeline started — Topic: "'+topic+'"');
+  await sleep(400);
+
+  setCard(0,'run','Đang fetch trend data...',10);addLog('Agent1','info','Fetching trend data from TikTok, YouTube, Facebook...');
+  await sleep(900);setCard(0,'run','Phân tích từ khóa...',35);addLog('Agent1','debug','Running keyword frequency analysis...');
+  await sleep(800);setCard(0,'run','Đánh giá đối thủ...',60);addLog('Agent1','debug','Competitor content analysis completed (47 profiles scanned)');
+  await sleep(700);setCard(0,'run','Tổng hợp báo cáo...',85);addLog('Agent1','debug','Found 127 trending keywords. Top: "AI video editor", "AI tools 2025"');
+  await sleep(600);setCard(0,'done','✓ 127 keywords — Brief ready',100);addLog('Agent1','success','Researcher DONE → passing brief to Planner');
+
+  var kws=['AI video editor','AI tools 2025','productivity hack','tự động hóa','ChatGPT tips','AI cho người Việt','content creator AI','workflow automation','tăng năng suất','AI image generator','công cụ AI miễn phí','AI viết bài'];
+  var kwEl=document.getElementById('kwTags');kwEl.innerHTML='';
+  kws.forEach(function(k){var s=document.createElement('span');s.className='kw';s.textContent=k;kwEl.appendChild(s);});
+
+  await sleep(300);
+  setCard(1,'run','Bắt đầu long-chain reasoning...',5);addLog('Agent2','info','Starting long-chain reasoning — 5 steps');
+  await sleep(600);setCard(1,'run','[1/5] Định nghĩa mục tiêu & KPI...',20);addLog('Agent2','debug','Step 1/5 — Defining content objectives & KPIs');
+  await sleep(700);setCard(1,'run','[2/5] Phân tích target audience...',40);addLog('Agent2','debug','Step 2/5 — Audience segmentation per platform');
+  await sleep(700);setCard(1,'run','[3/5] Thiết kế cấu trúc hook-body-CTA...',58);addLog('Agent2','debug','Step 3/5 — Content structure design (hook → body → CTA)');
+  await sleep(800);setCard(1,'run','[4/5] Viết kịch bản 3 nền tảng...',78);addLog('Agent2','debug','Step 4/5 — Writing scripts for 3 platform variants');
+  await sleep(700);setCard(1,'run','[5/5] Tối ưu format & timing...',92);addLog('Agent2','debug','Step 5/5 — Format & duration optimization (TT:45s, YT:55s, FB:60s)');
+  await sleep(500);setCard(1,'done','✓ 3 scripts — Storyboard ready',100);addLog('Agent2','success','Planner DONE → 3 platform scripts generated');
+
+  await sleep(300);
+  setCard(2,'run','Khởi động 4 parallel workers...',8);addLog('Agent3','info','Dispatching 4 parallel workers for asset generation');
+  await sleep(500);setCard(2,'run','[W1] Generating thumbnail — SDXL...',25);addLog('Agent3','info','[Worker-1] Thumbnail generation — Stable Diffusion XL');
+  await sleep(600);setCard(2,'run','[W2] Generating B-roll images x5...',45);addLog('Agent3','info','[Worker-2] B-roll images (5x) generated');
+  await sleep(700);setCard(2,'run','[W3] TTS voiceover — ElevenLabs...',65);addLog('Agent3','info','[Worker-3] TTS voiceover rendered — 3 language variants');
+  await sleep(800);setCard(2,'run','[W4] Video composition — Runway...',85);addLog('Agent3','info','[Worker-4] Video composition completed');
+  await sleep(500);setCard(2,'done','✓ 12 assets — Media bundle ready',100);addLog('Agent3','success','Creator DONE → 12 assets generated in parallel');
+
+  await sleep(300);
+  setCard(3,'run','Quality gate check...',15);addLog('Agent4','info','Running quality gate — policy compliance checks');
+  await sleep(700);setCard(3,'run','SEO optimization...',40);addLog('Agent4','info','Policy compliance — PASSED (TikTok ✓, YouTube ✓, Facebook ✓)');
+  await sleep(600);setCard(3,'run','Mobile-first render check...',65);addLog('Agent4','info','SEO optimization applied — titles, hashtags, descriptions optimized');
+  await sleep(700);setCard(3,'run','Scheduling distribution...',85);addLog('Agent4','info','Mobile render verified — 9:16 aspect ratio confirmed');
+  await sleep(600);setCard(3,'done','✓ Scheduled & ready to publish',100);addLog('Agent4','success','Optimizer DONE → Scheduled: TikTok 18:30 | YouTube 14:00 | Facebook 19:00');
+  await sleep(300);addLog('SYS','success','✅ Pipeline completed successfully in 4m 37s');
+
+  document.getElementById('metricsRow').style.display='grid';
+  animCount('m1',127,'',600);animCount('m2',3,'',400);animCount('m3',12,'',500);animCount('m4',94,'%',700);
+
+  document.getElementById('resultGrid').innerHTML='<div class="result-card"><div class="result-platform">TikTok</div><div class="result-status">✅</div><div class="result-label ready">Ready — 18:30</div></div><div class="result-card"><div class="result-platform">YouTube Shorts</div><div class="result-status">✅</div><div class="result-label ready">Ready — 14:00</div></div><div class="result-card"><div class="result-platform">Facebook Reels</div><div class="result-status">✅</div><div class="result-label ready">Ready — 19:00</div></div>';
+
+  btn.disabled=false;btn.textContent='▶ Run Pipeline';running=false;
+}
+function resetAll(){
+  if(running)return;
+  for(var i=0;i<4;i++)setCard(i,'idle','Chờ bắt đầu...',0);
+  document.getElementById('panel0').innerHTML='<div class="log-line"><span class="log-time">--:--:--</span><span class="log-tag info">[SYS]</span><span class="log-msg">System ready. Enter a topic and click Run Pipeline.</span></div>';
+  document.getElementById('metricsRow').style.display='none';
+  document.getElementById('kwTags').innerHTML='<span style="font-size:11px;color:var(--muted)">Chưa có dữ liệu. Chạy pipeline để phân tích.</span>';
+  document.getElementById('resultGrid').innerHTML='<div class="result-card"><div class="result-platform">TikTok</div><div class="result-status">⏳</div><div class="result-label pending">Pending</div></div><div class="result-card"><div class="result-platform">YouTube Shorts</div><div class="result-status">⏳</div><div class="result-label pending">Pending</div></div><div class="result-card"><div class="result-platform">Facebook Reels</div><div class="result-status">⏳</div><div class="result-label pending">Pending</div></div>';
+  switchTab(0);
+}
+</script>
